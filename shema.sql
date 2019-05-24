@@ -41,14 +41,14 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `carriage`.`orders` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) NOT NULL,
+  `userId` INT(11) NOT NULL,
   `type` VARCHAR(45) NOT NULL,
   `weight` VARCHAR(45) NOT NULL,
   `date` DATE NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_orders_1_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_orders_1_idx` (`userId` ASC) VISIBLE,
   CONSTRAINT `fk_orders_1`
-    FOREIGN KEY (`user_id`)
+    FOREIGN KEY (`userId`)
     REFERENCES `carriage`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -61,14 +61,14 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `carriage`.`addresses` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `order_id` INT(11) NOT NULL,
-  `address_sent` VARCHAR(100) NOT NULL,
-  `delivery_address` VARCHAR(100) NOT NULL,
+  `orderId` INT(11) NOT NULL,
+  `addressSent` VARCHAR(100) NOT NULL,
+  `deliveryAddress` VARCHAR(100) NOT NULL,
   `distance` INT(11) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_addresses_1_idx` (`order_id` ASC) VISIBLE,
+  INDEX `fk_addresses_1_idx` (`orderId` ASC) VISIBLE,
   CONSTRAINT `fk_addresses_1`
-    FOREIGN KEY (`order_id`)
+    FOREIGN KEY (`orderId`)
     REFERENCES `carriage`.`orders` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -81,13 +81,13 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `carriage`.`invoices` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `order_id` INT(11) NOT NULL,
+  `orderId` INT(11) NOT NULL,
   `sum` INT(11) NOT NULL,
   `state` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_invoices_1_idx` (`order_id` ASC) VISIBLE,
+  INDEX `fk_invoices_1_idx` (`orderId` ASC) VISIBLE,
   CONSTRAINT `fk_invoices_1`
-    FOREIGN KEY (`order_id`)
+    FOREIGN KEY (`orderId`)
     REFERENCES `carriage`.`orders` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)
@@ -100,12 +100,12 @@ DEFAULT CHARACTER SET = utf8;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `carriage`.`roles` (
   `id` INT(11) NOT NULL AUTO_INCREMENT,
-  `user_id` INT(11) NOT NULL,
+  `userId` INT(11) NOT NULL,
   `role` VARCHAR(10) NOT NULL,
   PRIMARY KEY (`id`),
-  INDEX `fk_roles_1_idx` (`user_id` ASC) VISIBLE,
+  INDEX `fk_roles_1_idx` (`userId` ASC) VISIBLE,
   CONSTRAINT `fk_roles_1`
-    FOREIGN KEY (`user_id`)
+    FOREIGN KEY (`userId`)
     REFERENCES `carriage`.`users` (`id`)
     ON DELETE CASCADE
     ON UPDATE CASCADE)

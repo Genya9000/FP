@@ -24,6 +24,13 @@ public class Order {
         this.date = date;
     }
 
+    public Order(Integer userId, String type, Integer weight, Date date) {
+        this.userId = userId;
+        this.type = type;
+        this.weight = weight;
+        this.date = date;
+    }
+
     public Integer getId() {
         return id;
     }

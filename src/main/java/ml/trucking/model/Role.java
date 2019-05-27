@@ -18,6 +18,15 @@ public class Role {
         this.role = role;
     }
 
+    public Role(Integer userId, String role) {
+        this.userId = userId;
+        this.role = role;
+    }
+
+    public Role(String role) {
+        this.role = role;
+    }
+
     public Integer getId() {
         return id;
     }

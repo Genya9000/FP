@@ -22,6 +22,13 @@ public class Address {
         this.distance = distance;
     }
 
+    public Address(Integer orderId, String addressSent, String deliveryAddress, String distance) {
+        this.orderId = orderId;
+        this.addressSent = addressSent;
+        this.deliveryAddress = deliveryAddress;
+        this.distance = distance;
+    }
+
     public Integer getId() {
         return id;
     }

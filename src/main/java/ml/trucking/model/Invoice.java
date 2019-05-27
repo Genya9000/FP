@@ -20,6 +20,12 @@ public class Invoice {
         this.state = state;
     }
 
+    public Invoice(Integer orderId, Integer sum, String state) {
+        this.orderId = orderId;
+        this.sum = sum;
+        this.state = state;
+    }
+
     public Integer getId() {
         return id;
     }

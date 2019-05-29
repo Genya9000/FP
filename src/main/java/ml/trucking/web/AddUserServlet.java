@@ -15,12 +15,11 @@ import java.io.IOException;
 import java.sql.*;
 
 
-
 @WebServlet("/adduser")
 public class AddUserServlet extends HttpServlet {
 
     private Connection connection;
-    UserDao dao = new UserDaoImpl(connection);
+
     @Override
     public void init() {
 
@@ -28,7 +27,7 @@ public class AddUserServlet extends HttpServlet {
         try {
             connection = ConnectPool.getDataSource().getConnection();
 
-        } catch ( SQLException  e) {
+        } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -39,7 +38,7 @@ public class AddUserServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html;charset=UTF-8");
         req.setCharacterEncoding("UTF-8");
         String name = req.getParameter("username");
@@ -50,17 +49,18 @@ public class AddUserServlet extends HttpServlet {
 
         try {
 
-
+            UserDao dao = new UserDaoImpl(connection);
             dao.addUser(name, phone, email, password);
 
-        }  finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        resp.getWriter().print(name);
+        resp.sendRedirect(req.getContextPath() + "jsp/login.jsp");
+
 
     }
 }

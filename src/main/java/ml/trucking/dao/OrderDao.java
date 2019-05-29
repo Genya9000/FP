@@ -6,7 +6,7 @@ import ml.trucking.model.Order;
 import java.sql.Date;
 import java.util.List;
 
-public interface OrderDao {
+public interface OrderDao  extends CrudDao{
 
     void addOrder(Integer userId, String type, Integer weight, Date date);
     void deleteOrder(int id);

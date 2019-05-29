@@ -28,7 +28,7 @@
         <label for="password">Введите пароль:</label><Br>
         <input id= "password" type="text" name="userpassword">
         <Br><Br>
-        <input type="submit" value="Отправить"/>
+        <input type="submit" value="Отправить" />
 
 
     </form>

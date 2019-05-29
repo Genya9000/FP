@@ -21,6 +21,7 @@ public class AddOrderServlet extends HttpServlet {
 
     private Connection connection;
     OrderDao dao = new OrderDaoImpl(connection);
+
     @Override
     public void init() {
 
@@ -28,7 +29,7 @@ public class AddOrderServlet extends HttpServlet {
         try {
             connection = ConnectPool.getDataSource().getConnection();
 
-        } catch ( SQLException e) {
+        } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
     }
@@ -39,7 +40,7 @@ public class AddOrderServlet extends HttpServlet {
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws  IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html;charset=UTF-8");
         req.setCharacterEncoding("UTF-8");
         String type = req.getParameter("ordertype");
@@ -47,11 +48,10 @@ public class AddOrderServlet extends HttpServlet {
         Date date = Date.valueOf(req.getParameter("orderdate"));
 
 
-
         try {
 
 
-        }  finally {
+        } finally {
             try {
                 connection.close();
             } catch (SQLException e) {

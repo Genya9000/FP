@@ -8,6 +8,7 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class OrderDaoImpl implements OrderDao {
     private final Connection connection;
@@ -43,5 +44,30 @@ public class OrderDaoImpl implements OrderDao {
     @Override
     public int orderId(Integer userId) {
         return 0;
+    }
+
+    @Override
+    public Optional find(Integer id) {
+        return Optional.empty();
+    }
+
+    @Override
+    public void save(Object model) {
+
+    }
+
+    @Override
+    public void update(Object model) {
+
+    }
+
+    @Override
+    public void delete(Integer id) {
+
+    }
+
+    @Override
+    public List findAll() {
+        return null;
     }
 }

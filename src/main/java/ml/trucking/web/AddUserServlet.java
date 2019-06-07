@@ -1,0 +1,67 @@
+package ml.trucking.web;
+
+import ml.trucking.dao.ConnectPool;
+import ml.trucking.dao.UserDao;
+import ml.trucking.services.UserDaoImpl;
+import org.apache.log4j.Logger;
+
+import javax.servlet.ServletException;
+
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import java.io.IOException;
+import java.sql.*;
+
+
+@WebServlet("/adduser")
+public class AddUserServlet extends HttpServlet {
+    private static final Logger LOG = Logger.getLogger(AddUserServlet.class);
+    private Connection connection;
+
+    @Override
+    public void init() {
+
+
+        try {
+            connection = ConnectPool.getDataSource().getConnection();
+
+        } catch (SQLException e) {
+            LOG.error("Some problem was occurred while getting connection to BD \n" + e);
+        }
+    }
+
+    @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp)  {
+        //req.getServletContext().getRequestDispatcher("/jsp/addUser.jsp").forward(req, resp);
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+        resp.setContentType("text/html;charset=UTF-8");
+        req.setCharacterEncoding("UTF-8");
+        String name = req.getParameter("username");
+        String phone = req.getParameter("userphone");
+        String email = req.getParameter("useremail");
+        String password = req.getParameter("userpassword");
+
+
+        try {
+
+            UserDao dao = new UserDaoImpl(connection);
+            dao.addUser(name, phone, email, password);
+
+        } finally {
+            try {
+                connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        resp.sendRedirect(req.getContextPath() + "jsp/afterRegister.jsp");
+
+
+    }
+}

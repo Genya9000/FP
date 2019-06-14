@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -87,10 +86,12 @@
             </div>
         </div>
     </div>
-
     <div id="griting">
-    <h1 class="text-center"><fmt:message key="you.can.just" /></h1>
-    <h2 class="text-center"><fmt:message key="all.you.need" /></h2></div>
+        <h1 class="text-center"><fmt:message key="you.can.just" /></h1>
+        <h2 class="text-center"><fmt:message key="all.you.need" /></h2>
+        <h2 id="incr" class="text-center"><fmt:message key="incorrect.login" /></h2>
+
+    </div>
     <div class="text-center mt-5 pt-5" id="info" style="padding-top:15px;">
         <h3><fmt:message key="our.company.has" /></h3>
     </div>
@@ -128,7 +129,7 @@
             <div class="form-group">
                 <label for="exampleInputPassword1"><fmt:message key="password" /></label>
                 <input type="password" name="userpassword" class="form-control" id="exampleInputPassword1" placeholder="000000" pattern=[A-Za-zА-Яа-яЁё0-9]{6,}>
-            </div><br><br>
+            </div>
             <button type="submit" class="btn btn-primary" ><fmt:message key="submit" /></button>
         </form></div>
     <button id="send" class="btn btn-primary btn-lg btn-space" type="submit" onClick='location.href="javascript:sh2()"'><fmt:message key="send.message" /></button>

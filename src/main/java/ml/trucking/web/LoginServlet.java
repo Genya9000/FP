@@ -2,6 +2,8 @@ package ml.trucking.web;
 
 import ml.trucking.dao.ConnectPool;
 import ml.trucking.dao.UserDao;
+import ml.trucking.model.User;
+
 import ml.trucking.services.UserDaoImpl;
 import org.apache.log4j.Logger;
 
@@ -9,25 +11,38 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 
 import java.io.IOException;
 import java.sql.*;
 
 
-@WebServlet("/adduser")
-public class AddUserServlet extends HttpServlet {
-    private static final Logger LOG = Logger.getLogger(AddUserServlet.class);
+@WebServlet("/login")
+public class LoginServlet extends HttpServlet {
+    private static final Logger LOG = Logger.getLogger(LoginServlet.class);
     private Connection connection;
-
+    private static String page;
 
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)  {
+        String a = req.getParameter("a");
+        HttpSession session = req.getSession(false);
 
+        if ("exit".equals(a) && (session != null))
+            session.removeAttribute("userId");
+        session.removeAttribute("orderId");
+
+        session.invalidate();
+LOG.info("user logout");
+
+        try {
+            resp.sendRedirect("index.jsp");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -39,8 +54,6 @@ public class AddUserServlet extends HttpServlet {
         }
         resp.setContentType("text/html;charset=UTF-8");
         req.setCharacterEncoding("UTF-8");
-        String name = req.getParameter("username");
-        String phone = req.getParameter("userphone");
         String email = req.getParameter("useremail");
         String password = req.getParameter("userpassword");
 
@@ -48,8 +61,34 @@ public class AddUserServlet extends HttpServlet {
         try {
 
             UserDao dao = new UserDaoImpl(connection);
-            dao.addUser(name, phone, email, password);
-            LOG.info("user added");
+            User user = dao.getUser(email, password);
+if (user==null ) {
+
+
+    LOG.info("Invalid email or Password");
+        page = "/jsp/errorLogin.jsp";
+
+
+}
+else      if ("admin@i.ua".equals(email)){
+    page="/jsp/admin.jsp";
+
+
+}
+else  {
+    Integer id = user.getId();
+    HttpSession session = req.getSession(true);
+    session.setAttribute("userId", id);
+    session.setAttribute("userName", user.getName());
+    Cookie idCookie = new Cookie("userId", Integer.toString(id));
+    resp.addCookie(idCookie);
+    LOG.info("new user login");
+     page="/jsp/cabinet.jsp";
+}
+
+
+
+
         } finally {
             try {
                 connection.close();
@@ -58,11 +97,11 @@ public class AddUserServlet extends HttpServlet {
                 e.printStackTrace();
             }
         }
-        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/afterRegister.jsp");
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(page);
         try {
             dispatcher.forward(req, resp);
         } catch (ServletException e) {
-            LOG.error("afterRegister not find");
+            LOG.error("cabinet not find");
             e.printStackTrace();
         }
 

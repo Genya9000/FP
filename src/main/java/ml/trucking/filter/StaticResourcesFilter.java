@@ -1,7 +1,7 @@
 package ml.trucking.filter;
 
 import javax.servlet.*;
-import javax.servlet.annotation.WebFilter;
+
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
@@ -14,7 +14,7 @@ public class StaticResourcesFilter implements Filter {
     private String forwardPath = "/";
 
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig)  {
 
     }
 
@@ -32,7 +32,7 @@ public class StaticResourcesFilter implements Filter {
                 || path.endsWith(forwardPath)) {
             filterChain.doFilter(request, response);
         } else {
-            req.getRequestDispatcher(forwardPath + path).forward(request, response); // Goes to controller.
+            req.getRequestDispatcher(forwardPath + path).forward(request, response);
         }
     }
 }

@@ -9,5 +9,6 @@ public interface UserDao extends CrudDao {
     void addUser(String name, String phone, String email, String password);
     void deleteUser(String password);
     List<User> getAll();
+    User getUser(String email, String password);
     int UserId(String email);
 }

@@ -1,30 +1,82 @@
 package ml.trucking.web;
 
 import ml.trucking.dao.ConnectPool;
-import ml.trucking.dao.OrderDao;
-import ml.trucking.dao.UserDao;
-import ml.trucking.services.OrderDaoImpl;
-import ml.trucking.services.UserDaoImpl;
 
+import ml.trucking.model.Order;
+import ml.trucking.model.State;
+import ml.trucking.model.User;
+
+import ml.trucking.services.AddressDaoImpl;
+import ml.trucking.services.InvoiceDaoImpl;
+import ml.trucking.services.OrderDaoImpl;
+
+import org.apache.log4j.Logger;
+
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.Date;
+
 import java.sql.SQLException;
+import java.util.List;
 
 @WebServlet("/addorder")
 public class AddOrderServlet extends HttpServlet {
 
+    private static final Logger LOG = Logger.getLogger(AddOrderServlet.class);
+
     private Connection connection;
-    OrderDao dao = new OrderDaoImpl(connection);
+
+
 
     @Override
-    public void init() {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            connection = ConnectPool.getDataSource().getConnection();
 
+        } catch (SQLException e) {
+            throw new IllegalStateException(e);
+        }
+        resp.setContentType("text/html");
+        int limit1= Integer.parseInt(req.getParameter("limit1"));
+        int limit2= Integer.parseInt(req.getParameter("limit2"));
+        try {
+
+            OrderDaoImpl dao = new OrderDaoImpl(connection);
+            List<Order> list = dao.getAll(limit1,limit2);
+            HttpSession session = req.getSession(true);
+            session.setAttribute("lists", list);
+
+
+        } finally {
+            try {
+                connection.close();
+                LOG.info("connection addmessage close");
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/admin.jsp");
+        try {
+            try {
+                dispatcher.forward(req, resp);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (ServletException e) {
+            LOG.error("cabinet not find");
+            e.printStackTrace();
+        }
+
+
+
+    }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 
         try {
             connection = ConnectPool.getDataSource().getConnection();
@@ -32,33 +84,78 @@ public class AddOrderServlet extends HttpServlet {
         } catch (SQLException e) {
             throw new IllegalStateException(e);
         }
-    }
-
-    @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException, ServletException {
-        req.getServletContext().getRequestDispatcher("/jsp/addOrder.jsp").forward(req, resp);
-    }
-
-    @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         resp.setContentType("text/html;charset=UTF-8");
         req.setCharacterEncoding("UTF-8");
-        String type = req.getParameter("ordertype");
-        Integer weight = Integer.parseInt(req.getParameter("orderweight"));
-        Date date = Date.valueOf(req.getParameter("orderdate"));
+        String type = req.getParameter("usertype");
+        Integer weight = Integer.parseInt(req.getParameter("userweight"));
+        String date = req.getParameter("userdate");
+        String addressFrom = req.getParameter("useraddress1");
+        String addressWhere = req.getParameter("useraddress2");
+        Integer distance = Integer.parseInt(req.getParameter("userdistance"));
 
 
+        double sum = weight * distance / 10 + 200;
+        int price = (int) sum;
+        HttpSession session = req.getSession(true);
+        session.setAttribute("price", price);
+        Integer id = (Integer) session.getAttribute("userId");
+        try {
+            connection.setAutoCommit(false);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         try {
 
+            try {
 
+                OrderDaoImpl orderDao = new OrderDaoImpl(connection);
+
+
+                orderDao.addOrder(id, type, weight, date);
+                LOG.info("order add");
+                Order order = new Order();
+                Integer orderId = order.getId();
+                session.setAttribute("orderId", orderId);
+
+                AddressDaoImpl dao = new AddressDaoImpl(connection);
+
+                dao.addAddress(orderId, addressFrom, addressWhere, distance);
+
+
+                LOG.info("address add");
+                InvoiceDaoImpl invoiceDao = new InvoiceDaoImpl(connection);
+                invoiceDao.addInvoice(orderId, price, String.valueOf(State.notPaid));
+                LOG.info("invoice add");
+            } finally {
+                try {
+                    connection.close();
+                    LOG.info("connection closed");
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                    LOG.error("already not");
+                }
+            }
+        } catch (Exception ex) {
+            try {
+                connection.rollback();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         } finally {
             try {
-                connection.close();
+                connection.setAutoCommit(true);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        resp.getWriter().print("hi");
 
+
+        RequestDispatcher dispatcher = getServletContext().getRequestDispatcher("/jsp/cabinet.jsp");
+        try {
+            dispatcher.forward(req, resp);
+        } catch (ServletException e) {
+            LOG.error("cabinet not find");
+            e.printStackTrace();
+        }
     }
 }

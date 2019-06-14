@@ -1,4 +1,3 @@
-
 <%@ page language="java" contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
@@ -8,7 +7,7 @@
 
 <!DOCTYPE html>
 
-<html lang="en">
+<%--<html lang="${locale}>--%>
 
 <head>
     <meta charset="utf-8">
@@ -63,7 +62,7 @@
 
 
 
-        <button data-toggle="modal" data-target="#exampleModal"class="btn btn-primary btn-lg btn-space" type="submit" onClick='location.href="javascript:sh4()"'  ><fmt:message key="login" /></button>
+        <button data-toggle="modal" data-target="#exampleModal"class="btn btn-primary btn-lg btn-space" type="submit"  onClick='location.href="index.jsp"' ><fmt:message key="login" /></button>
         <button class="btn btn-primary btn-lg btn-space" type="submit" onClick='location.href="javascript:sh1()"'><fmt:message key="register" /></button>
     </div>
 
@@ -87,28 +86,15 @@
             </div>
         </div>
     </div>
+    <div class="text-center mt-5 pt-5 ">
 
-    <div id="griting">
-    <h1 class="text-center"><fmt:message key="you.can.just" /></h1>
-    <h2 class="text-center"><fmt:message key="all.you.need" /></h2></div>
+        <p class="lead"><fmt:message key="you.can.just" /></p>
+        <p class="lead"><fmt:message key="all.you.need" /></p>
+    </div>
     <div class="text-center mt-5 pt-5" id="info" style="padding-top:15px;">
         <h3><fmt:message key="our.company.has" /></h3>
     </div>
-    <div class="form" id = "form1">
-        <form action="/login" method="post">
 
-
-            <div>
-                <label for="exampleInputEmail1"><fmt:message key="email.address" /></label>
-                <input required type="email" name="useremail" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp" placeholder="Enter email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                <small id="emailHelp1" class="form-text text-muted"><fmt:message key="we'll.never.email" /></small>
-            </div>
-            <div class="form-group">
-                <label for="exampleInputPassword1"><fmt:message key="password" /></label>
-                <input required type="password" name="userpassword" class="form-control" id="exampleInputPassword2" placeholder="Password" pattern=[A-Za-zА-Яа-яЁё0-9]{6,} >
-            </div>
-            <button type="submit" class="btn btn-primary" ><fmt:message key="submit" /></button>
-        </form></div>
     <div class="form" id = "form">
         <form action="adduser" method="post">
             <div class="form-group">
@@ -122,13 +108,13 @@
             </div>
             <div>
                 <label for="exampleInputEmail1"><fmt:message key="email.address" /></label>
-                <input type="email" name="useremail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                <input type="email" name="useremail" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
                 <small id="emailHelp" class="form-text text-muted"><fmt:message key="we'll.never.email" /></small>
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1"><fmt:message key="password" /></label>
-                <input type="password" name="userpassword" class="form-control" id="exampleInputPassword1" placeholder="000000" pattern=[A-Za-zА-Яа-яЁё0-9]{6,}>
-            </div><br><br>
+                <input type="password" name="userpassword" class="form-control" id="exampleInputPassword1" placeholder="Password">
+            </div>
             <button type="submit" class="btn btn-primary" ><fmt:message key="submit" /></button>
         </form></div>
     <button id="send" class="btn btn-primary btn-lg btn-space" type="submit" onClick='location.href="javascript:sh2()"'><fmt:message key="send.message" /></button>
@@ -156,7 +142,12 @@
 
         </div>
     </div>
-
+    <div id="alert1" class="alert alert-primary alert-dismissible fade show" role="alert">
+        <fmt:message key="inform.alert" />
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">×</span>
+        </button>
+    </div>
 
 
 </main>

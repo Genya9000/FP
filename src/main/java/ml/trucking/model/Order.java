@@ -3,20 +3,18 @@ package ml.trucking.model;
 import java.util.Date;
 
 public class Order {
-    private Integer id;
+    private static Integer id;
     private Integer userId;
     private String type;
     private Integer weight;
-    private Date date;
+    private String date;
 
     public Order() {
     }
 
-    public Order(Integer id) {
-        this.id = id;
-    }
 
-    public Order(Integer id, Integer userId, String type, Integer weight, Date date) {
+
+    public Order(Integer id, Integer userId, String type, Integer weight, String date) {
         this.id = id;
         this.userId = userId;
         this.type = type;
@@ -24,7 +22,7 @@ public class Order {
         this.date = date;
     }
 
-    public Order(Integer userId, String type, Integer weight, Date date) {
+    public Order(Integer userId, String type, Integer weight, String date) {
         this.userId = userId;
         this.type = type;
         this.weight = weight;
@@ -63,11 +61,11 @@ public class Order {
         this.weight = weight;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
